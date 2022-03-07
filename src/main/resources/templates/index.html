@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:insert="layouts/layout.html :: header">
 </head>
 <body>
@@ -10,9 +10,22 @@
 
 <div class="container">
     <p class="mt-2">
-    <h1>INDEX page -  default</h1>
+    <h1>INDEX page - default</h1>
 
     <a class="nav-link" th:text="${UNAME}" href="#"></a>
+    <br>
+    <span sec:authorize="isAuthenticated()">
+        | Logged user: <span sec:authentication="name"> </span>
+        | Roles: <span sec:authentication="principal.authorities"></span>
+        | <a th:href="@{/logout}">Sign Out</a>
+    </span>
+
+    <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" value="Sign Out"/>
+    </form>
+
+
 </div>
 
 </div>

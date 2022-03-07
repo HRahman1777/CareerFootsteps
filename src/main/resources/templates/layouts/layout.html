@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head th:fragment="header">
     <meta charset="UTF-8">
 
@@ -26,31 +26,33 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/home}">Home</a>
+                    <a class="nav-link" th:classappend="${#httpServletRequest.requestURI.contains('home')} ? 'active' :''" th:href="@{/home}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" th:href="@{/allpost}">All Posts</a>
+                    <a class="nav-link" th:classappend="${#httpServletRequest.requestURI.contains('allpost')} ? 'active' :''" th:href="@{/allpost}">All Posts</a>
                 </li>
             </ul>
             <div class="d-flex">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item" th:if="${UNAME} != 'anonymousUser'">
-                        <a class="nav-link" th:text="${UNAME}" href="#"></a>
+
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" th:inline="text">[[${#httpServletRequest.remoteUser}]]</a>
                     </li>
 
-                    <li class="nav-item" th:if="${UNAME} != 'anonymousUser'">
-                        <form th:action="@{/logout}" method="post">
-                            <input class="nav-link" type="submit" value="Sign Out"/>
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <form th:action="@{/logout}" method="post" class="nav-link">
+                            <input type="submit" value="Sign Out"/>
                         </form>
                     </li>
 
-                    <li class="nav-item" th:if="${UNAME} == 'anonymousUser'">
-                        <a class="nav-link" th:href="@{/login}">Sign In</a>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" th:classappend="${#httpServletRequest.requestURI.contains('login')} ? 'active' :''" th:href="@{/login}">Sign In</a>
+                    </li>
+                    <li class="nav-item" sec:authorize="!isAuthenticated()">
+                        <a class="nav-link" th:classappend="${#httpServletRequest.requestURI.contains('signup')} ? 'active' :''" th:href="@{/signup}">Sign Up</a>
                     </li>
 
-                    <li class="nav-item" th:if="${UNAME} == 'anonymousUser'">
-                        <a class="nav-link" th:href="@{/signup}">Sign Up</a>
-                    </li>
+
                 </ul>
             </div>
         </div>
@@ -61,23 +63,25 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-danger" th:fragment="admin_navbar">
     <div class="container-fluid">
         <a class="navbar-brand" th:href="@{/}">CFs</a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContentAdmin"
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContentAdmin"
                 aria-controls="navbarSupportedContentAdmin" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContentAdmin">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" th:href="@{/home}">Home</a>
+                    <a class="nav-link" th:href="@{/home}">Home</a>
                 </li>
             </ul>
             <div class="d-flex">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item" th:if="${UNAME} != 'anonymousUser'">
-                        <a class="nav-link" th:text="${UNAME}" href="#"></a>
+
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
+                        <a class="nav-link" th:inline="text">[[${#httpServletRequest.remoteUser}]]</a>
                     </li>
 
-                    <li class="nav-item" th:if="${UNAME} != 'anonymousUser'">
+                    <li class="nav-item" sec:authorize="isAuthenticated()">
                         <form th:action="@{/logout}" method="post">
                             <input type="submit" value="Sign Out"/>
                         </form>

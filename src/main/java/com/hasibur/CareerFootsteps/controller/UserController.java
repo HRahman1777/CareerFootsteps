@@ -56,7 +56,7 @@ public class UserController {
     }
 
     @PostMapping("/process_signup")
-    public String processSignup(User user, Model model) {
+    public String processSignup(User user) {
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
@@ -64,32 +64,16 @@ public class UserController {
 
         userService.addUser(user);
 
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String uname = auth.getName();
-        model.addAttribute("UNAME", uname);
-
         return "/user/signup_success.html";
     }
 
     @GetMapping("/access_denied")
-    public String accessDeniedPage(Model model){
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String uname = auth.getName();
-        model.addAttribute("UNAME", uname);
+    public String accessDeniedPage(){
 
         return "user/access_denied.html";
     }
     @GetMapping("/logout_warning")
-    public String logoutWarning(Model model){
-
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String uname = auth.getName();
-
-
-        model.addAttribute("UNAME", uname);
+    public String logoutWarning(){
 
         return "user/logout_warning.html";
     }

@@ -14,9 +14,6 @@ public class MainController {
     @GetMapping
     public String mainPage(Model model){
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String uname = auth.getName();
-        model.addAttribute("UNAME", uname);
 
         return "index.html";
     }
@@ -24,9 +21,6 @@ public class MainController {
     @GetMapping("/home")
     public String homePage(Model model){
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String uname = auth.getName();
-        model.addAttribute("UNAME", uname);
 
         return "home.html";
     }
@@ -34,9 +28,6 @@ public class MainController {
     @GetMapping("/allpost")
     public String allPost(Model model){
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String uname = auth.getName();
-        model.addAttribute("UNAME", uname);
 
         return "allpost.html";
     }
@@ -44,9 +35,6 @@ public class MainController {
     @GetMapping("/single_post")
     public String singlePost(Model model){
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String uname = auth.getName();
-        model.addAttribute("UNAME", uname);
 
         return "singlepost.html";
     }
@@ -54,9 +42,6 @@ public class MainController {
     @GetMapping("/profile")
     public String userProfile(Model model){
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String uname = auth.getName();
-        model.addAttribute("UNAME", uname);
 
         return "user/profile.html";
     }

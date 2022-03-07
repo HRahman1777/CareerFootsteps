@@ -10,13 +10,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class AdminController {
 
     @GetMapping("/admin")
-    public String adminHome(Model model){
+    public String adminHome(){
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String uname = auth.getName();
-
-        model.addAttribute("UNAME", uname);
-        model.addAttribute("AUTH", auth);
 
         return "admin/dashboard.html";
     }
