@@ -1,9 +1,13 @@
 package com.hasibur.CareerFootsteps.service.post;
 
 import com.hasibur.CareerFootsteps.model.Post;
+import com.hasibur.CareerFootsteps.model.User;
 import com.hasibur.CareerFootsteps.repository.PostRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PostServiceImp implements PostService{
@@ -14,5 +18,20 @@ public class PostServiceImp implements PostService{
     @Override
     public Post addPost(Post post) {
         return postRepo.save(post);
+    }
+
+    @Override
+    public List<Post> getAllPost() {
+        return postRepo.findAll();
+    }
+
+    @Override
+    public Post getPostById(Long id) {
+        return postRepo.findById(id).get();
+    }
+
+    @Override
+    public List<Post> getPostByUser(User user) {
+        return postRepo.getPostByUser(user);
     }
 }

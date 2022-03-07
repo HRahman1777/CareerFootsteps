@@ -1,6 +1,7 @@
 package com.hasibur.CareerFootsteps.controller;
 
 import com.hasibur.CareerFootsteps.auth.UserInfo;
+import com.hasibur.CareerFootsteps.model.Category;
 import com.hasibur.CareerFootsteps.model.Post;
 import com.hasibur.CareerFootsteps.model.User;
 import com.hasibur.CareerFootsteps.service.category.CategoryService;
@@ -9,6 +10,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Controller
@@ -25,34 +31,9 @@ public class MainController {
 
 
     @GetMapping
-    public String mainPage(Model model){
-
+    public String mainPage(){
 
         return "index.html";
     }
 
-    @GetMapping("/user/home")
-    public String homePage(Model model){
-
-        User user = userInfo.userInfo();
-        model.addAttribute("userid", user.getId());
-        model.addAttribute("post_form", new Post());
-        model.addAttribute("categories", categoryService.getAllCategory());
-
-        return "home.html";
-    }
-
-    @GetMapping("/user/allpost")
-    public String allPost(Model model){
-
-
-        return "allpost.html";
-    }
-
-    @GetMapping("/user/single_post")
-    public String singlePost(Model model){
-
-
-        return "singlepost.html";
-    }
 }

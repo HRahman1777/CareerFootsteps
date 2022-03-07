@@ -17,28 +17,40 @@
     </p>
     <div class="collapse" id="collapseCard">
         <div class="card card-body shadow p-3 mb-5 bg-body rounded">
-            <form th:href="@{/user/posted}" method="post">
+            <form th:action="@{/user/posted}" th:object="${post_form}" method="post">
+
                 <button type="reset" class="btn btn-outline-warning btn-sm mb-2">Clear Form</button>
-                <input th:value="${userid}"/>
+
+                <div class="mb-3">
+                    <label for="titleInput" class="form-label">Category</label>
+                    <select class="form-select" th:field="*{category}" required>
+                        <th:block th:each="cat: ${categories}">
+                            <option th:value="${cat.id}" th:text="${cat.name}"/>
+                        </th:block>
+                    </select>
+                </div>
+
                 <div class="mb-3">
                     <label for="titleInput" class="form-label">Title</label>
-                    <input type="text" class="form-control" id="titleInput" placeholder="enter title">
+                    <input type="text" class="form-control" id="titleInput" placeholder="enter title"
+                           th:field="*{title}" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="bodyInput" class="form-label">Description</label>
-                    <textarea class="form-control" id="bodyInput" rows="3"></textarea>
+                    <textarea class="form-control" id="bodyInput" rows="3" th:field="*{description}"></textarea>
                 </div>
 
                 <div class="mb-3">
                     <label for="fileImage" class="form-label">Picture</label>
-                    <input type="text" class="form-control" id="fileImage" placeholder="enter title">
+                    <input type="text" class="form-control" id="fileImage" placeholder="enter title"
+                           th:field="*{picture}">
                 </div>
+
 
                 <div class="mb-3">
                     <button type="submit" class="btn btn-outline-dark">Post</button>
                 </div>
-
             </form>
         </div>
     </div>
@@ -57,35 +69,22 @@
 
     </div>
 
-    <div class="card card-body shadow p-3 mb-3 bg-body rounded">
-        <h2>Post Title ,,,,,,,,,,,,.</h2>
-        <p>Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-        </p>
+    <th:block th:each="post: ${posts}">
+        <div class="card card-body shadow p-3 mb-3 bg-body rounded">
+            <h2 th:text="${post.title}"></h2>
+            <p class="text-muted" th:text="|@${post.user.username} - ${post.time} - ${post.category.name}|"><small/>
+            <p th:text="${post.description}"></p>
+            <p class="mt-1" th:text="${post.picture}">IMAGE</p>
+            <a th:href="|@{/user/single_post}/${post.id}|">View</a>
+        </div>
+    </th:block>
 
-        <p class="mt-1">IMAGE</p>
 
-        <img th:src="@{../img/img1.JPG}" class="img-fluid" alt="Test Image">
 
-    </div>
 
-    <div class="card card-body shadow p-3 mb-3 bg-body rounded">
-        <h2>Post Title ,,,,,,,,,,,,.</h2>
-        <p>Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-        </p>
-
-        <p class="mt-1">IMAGE</p>
-
-        <img th:src="@{../img/img1.JPG}" class="img-fluid" alt="Test Image">
-
-    </div>
-
-    <a class="btn mb-3 btn-outline-dark" th:href="@{/user/allpost}">Show More <span class="iconify" data-icon="ion:arrow-forward-circle" data-width="32"></span></a>
+    <a class="btn mb-3 btn-outline-dark" th:href="@{/user/allpost}">Show More <span class="iconify"
+                                                                                    data-icon="ion:arrow-forward-circle"
+                                                                                    data-width="32"></span></a>
 
 </div>
 
