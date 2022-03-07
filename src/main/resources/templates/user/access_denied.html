@@ -8,13 +8,11 @@
 <div th:insert="layouts/layout.html :: navbar">
 </div>
 
-<div class="container">
+<div class="container text-center">
     <p class="mt-2">
-    <h1>INDEX page -  default</h1>
+    <h1 class="alert alert-danger">Sorry You Don't Have Permission in That Page....</h1>
 
-    <a class="nav-link" th:text="${UNAME}" href="#"></a>
-</div>
-
+    <h3>Go to <a class="btn btn-outline-info" th:href="@{/home}">Home</a> Page</h3>
 </div>
 
 

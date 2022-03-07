@@ -1,18 +1,14 @@
 package com.hasibur.CareerFootsteps.model;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.List;
 
 @AllArgsConstructor
 @NoArgsConstructor
-@Getter
-@Setter
+@Data
 @Entity
 @Table(name="user_table")
 public class User {
@@ -20,9 +16,22 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    private String name;
+
+    @Column(nullable = false)
+    private String firstName;
+
+    @Column(nullable = false)
+    private String lastName;
+
+    @Column(nullable = false)
     private String email;
-    private String mobile;
+
+    @Column(nullable = false, unique = true)
     private String username;
+
+    @Column(nullable = false)
+    private String password;
+
+    private String role = "USER";
 
 }

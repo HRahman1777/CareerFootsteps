@@ -5,14 +5,14 @@
 </head>
 <body>
 
-<div th:insert="layouts/layout.html :: navbar">
+<div th:insert="layouts/layout.html :: admin_navbar">
 </div>
 
 <div class="container">
-    <p class="mt-2">
-    <h1>INDEX page -  default</h1>
 
-    <a class="nav-link" th:text="${UNAME}" href="#"></a>
+    <h1>This is Admin</h1>
+    <p th:text="${AUTH}"></p>
+
 </div>
 
 </div>

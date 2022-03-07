@@ -34,16 +34,53 @@
             </ul>
             <div class="d-flex">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Username</a>
+                    <li class="nav-item" th:if="${UNAME} != 'anonymousUser'">
+                        <a class="nav-link" th:text="${UNAME}" href="#"></a>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Sign In</a>
+                    <li class="nav-item" th:if="${UNAME} != 'anonymousUser'">
+                        <form th:action="@{/logout}" method="post">
+                            <input class="nav-link" type="submit" value="Sign Out"/>
+                        </form>
                     </li>
 
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Sign Up</a>
+                    <li class="nav-item" th:if="${UNAME} == 'anonymousUser'">
+                        <a class="nav-link" th:href="@{/login}">Sign In</a>
+                    </li>
+
+                    <li class="nav-item" th:if="${UNAME} == 'anonymousUser'">
+                        <a class="nav-link" th:href="@{/signup}">Sign Up</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-danger" th:fragment="admin_navbar">
+    <div class="container-fluid">
+        <a class="navbar-brand" th:href="@{/}">CFs</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContentAdmin"
+                aria-controls="navbarSupportedContentAdmin" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContentAdmin">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/home}">Home</a>
+                </li>
+            </ul>
+            <div class="d-flex">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item" th:if="${UNAME} != 'anonymousUser'">
+                        <a class="nav-link" th:text="${UNAME}" href="#"></a>
+                    </li>
+
+                    <li class="nav-item" th:if="${UNAME} != 'anonymousUser'">
+                        <form th:action="@{/logout}" method="post">
+                            <input type="submit" value="Sign Out"/>
+                        </form>
                     </li>
                 </ul>
             </div>
