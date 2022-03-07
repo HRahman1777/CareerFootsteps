@@ -17,8 +17,9 @@
     </p>
     <div class="collapse" id="collapseCard">
         <div class="card card-body shadow p-3 mb-5 bg-body rounded">
-            <form>
+            <form th:href="@{/user/posted}" method="post">
                 <button type="reset" class="btn btn-outline-warning btn-sm mb-2">Clear Form</button>
+                <input th:value="${userid}"/>
                 <div class="mb-3">
                     <label for="titleInput" class="form-label">Title</label>
                     <input type="text" class="form-control" id="titleInput" placeholder="enter title">
@@ -52,7 +53,7 @@
 
         <p class="mt-1">IMAGE</p>
 
-        <img th:src="@{img/img1.JPG}" class="img-fluid" alt="Test Image">
+        <img th:src="@{../img/img1.JPG}" class="img-fluid" alt="Test Image">
 
     </div>
 
@@ -66,7 +67,7 @@
 
         <p class="mt-1">IMAGE</p>
 
-        <img th:src="@{img/img1.JPG}" class="img-fluid" alt="Test Image">
+        <img th:src="@{../img/img1.JPG}" class="img-fluid" alt="Test Image">
 
     </div>
 
@@ -80,11 +81,11 @@
 
         <p class="mt-1">IMAGE</p>
 
-        <img th:src="@{img/img1.JPG}" class="img-fluid" alt="Test Image">
+        <img th:src="@{../img/img1.JPG}" class="img-fluid" alt="Test Image">
 
     </div>
 
-    <a class="btn mb-3 btn-outline-dark" th:href="@{/allpost}">Show More <span class="iconify" data-icon="ion:arrow-forward-circle" data-width="32"></span></a>
+    <a class="btn mb-3 btn-outline-dark" th:href="@{/user/allpost}">Show More <span class="iconify" data-icon="ion:arrow-forward-circle" data-width="32"></span></a>
 
 </div>
 

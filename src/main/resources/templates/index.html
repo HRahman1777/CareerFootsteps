@@ -17,11 +17,11 @@
     <span sec:authorize="isAuthenticated()">
         | Logged user: <span sec:authentication="name"> </span>
         | Roles: <span sec:authentication="principal.authorities"></span>
-        | <a th:href="@{/logout}">Sign Out</a>
+        | <a th:href="@{/user/logout}">Sign Out</a>
     </span>
 
     <h1 th:inline="text">Hello [[${#httpServletRequest.remoteUser}]]!</h1>
-    <form th:action="@{/logout}" method="post">
+    <form th:action="@{/user/logout}" method="post">
         <input type="submit" value="Sign Out"/>
     </form>
 

@@ -1,6 +1,7 @@
 package com.hasibur.CareerFootsteps.controller;
 
 
+import com.hasibur.CareerFootsteps.auth.UserInfo;
 import com.hasibur.CareerFootsteps.model.User;
 import com.hasibur.CareerFootsteps.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,34 +23,31 @@ public class UserController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserInfo userInfo;
+
     @GetMapping("/login")
-    public String login(){
+    public String login() {
 
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String uname = auth.getName();
-
-
-        if ("anonymousUser".equals(uname)){
+        User user = userInfo.userInfo();
+        if (user == null) {
             return "user/signin.html";
-        }else {
+        } else {
             return "redirect:/logout_warning";
         }
 
     }
 
     @GetMapping("/signup")
-    public String userSignup(Model model){
+    public String userSignup(Model model) {
+        
         model.addAttribute("user", new User());
 
+        User user = userInfo.userInfo();
 
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        String uname = auth.getName();
-
-
-        if ("anonymousUser".equals(uname)){
+        if (user == null) {
             return "user/signup.html";
-        }else {
+        } else {
             return "redirect:/logout_warning";
         }
 
@@ -68,18 +66,19 @@ public class UserController {
     }
 
     @GetMapping("/access_denied")
-    public String accessDeniedPage(){
+    public String accessDeniedPage() {
 
         return "user/access_denied.html";
     }
+
     @GetMapping("/logout_warning")
-    public String logoutWarning(){
+    public String logoutWarning() {
 
         return "user/logout_warning.html";
     }
 
 
-    @PostMapping("/logout")
+    @PostMapping("/user/logout")
     public String customLogout(HttpServletRequest request, HttpServletResponse response) {
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -89,6 +88,23 @@ public class UserController {
             new SecurityContextLogoutHandler().logout(request, response, auth);
         }
         return "redirect:/";
+    }
+
+
+    //===========================================
+    //========= POST, PROFILE, SETTINGS =====>>>>>
+    //===========================================
+
+
+    @GetMapping("/user/profile")
+    public String userProfile(Model model) {
+
+        String uname = userInfo.userInfo().getUsername();
+
+        User user = userInfo.userInfo();
+        model.addAttribute("user", user);
+
+        return "user/profile.html";
     }
 
 

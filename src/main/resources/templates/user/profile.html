@@ -14,8 +14,11 @@
         <img th:src="@{img/img1.JPG}" class="mt-2 img-fluid rounded-circle"
              style="max-width: 10rem; height: 10rem;" alt="Test Image">
         <br>
-        <h6 class="">User Name</h6>
-        <p>User Name</p>
+
+        <h4 class="" th:text="|${user.firstName} ${user.lastName}|"></h4>
+        <p>Username: <h6 th:text="${user.username}"></h6></p>
+        <p>Email: <h6 th:text="${user.email}"></h6></p>
+        <a class="btn btn-outline-dark btn-sm" style="color: white">Settings</a>
 
     </div>
 </div>

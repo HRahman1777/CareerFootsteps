@@ -1,5 +1,6 @@
 package com.hasibur.CareerFootsteps.auth;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -10,11 +11,13 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.AccessDeniedHandler;
 
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
 
     @Bean
     public UserDetailsService userDetailsService() {
@@ -42,22 +45,20 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().antMatchers("/", "/signup", "/login/**", "/process_signup/**", "/access_denied", "/logout_warning").permitAll();
-
-        http.authorizeRequests().antMatchers("/css/**", "/js/**", "/img/**").permitAll();
-
-        http.authorizeRequests().antMatchers("/admin").hasAuthority("ADMIN")
-                .and().formLogin().loginPage("/login");
-
-        http.authorizeRequests().antMatchers("/**").hasAnyAuthority("ADMIN", "USER")
-                .and().formLogin().loginPage("/login");
-
-        http.authorizeRequests().antMatchers("/logout").hasAnyAuthority("ADMIN", "USER")
-                .and().formLogin().loginPage("/login");
-
-        http.authorizeRequests().antMatchers("/admin").hasAuthority("ADMIN")
-                .and().formLogin().loginPage("/login");
-
-        http.exceptionHandling().accessDeniedPage("/access_denied");
+        http
+                .authorizeRequests()
+                .antMatchers("/", "/signup","/process_signup", "/access_denied", "/logout_warning", "/css/**", "/js/**", "/img/**").permitAll()
+                .antMatchers("/admin/**").hasAuthority("ADMIN")
+                .antMatchers("/user/**").hasAnyAuthority("USER", "ADMIN")
+                .anyRequest().authenticated()
+                .and()
+                .formLogin()
+                .loginPage("/login")
+                .permitAll()
+                .and()
+                .logout()
+                .permitAll()
+                .and()
+                .exceptionHandling().accessDeniedPage("/access_denied");
     }
 }
