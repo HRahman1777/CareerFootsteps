@@ -13,8 +13,7 @@ public class Tag {
 
     private String name;
 
-    @ManyToMany
-    @JoinColumn(name = "post_id")
+    @ManyToMany(mappedBy = "tagList")
     private List<Post> postList;
 
     public Tag() {

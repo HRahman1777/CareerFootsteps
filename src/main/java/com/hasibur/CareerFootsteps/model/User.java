@@ -42,4 +42,10 @@ public class User {
 
     private String role = "USER";
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Post> postList;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Comment> commentList;
+
 }

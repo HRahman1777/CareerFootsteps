@@ -1,10 +1,18 @@
 package com.hasibur.CareerFootsteps.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import java.util.List;
 
 @Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name ="comment_table")
 public class Comment {
     @Id
@@ -12,42 +20,19 @@ public class Comment {
     @Column(name = "id", nullable = false)
     private Long id;
 
+    @NotEmpty(message = "Comment Field Empty!")
+    private String commentName;
 
-    @NotEmpty(message = "Field is Empty!")
-    private String comment;
+    private String time;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "post_id")
     private Post post;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
     private User user;
 
 
-
-    public Comment() {
-    }
-
-    public Comment(Long id, String comment) {
-        this.id = id;
-        this.comment = comment;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
 }

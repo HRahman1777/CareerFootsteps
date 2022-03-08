@@ -1,6 +1,7 @@
 package com.hasibur.CareerFootsteps.model;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name="category_table")
@@ -11,6 +12,9 @@ public class Category {
     private Long id;
 
     private String name;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<Post> postList;
 
     public Category() {
     }

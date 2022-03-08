@@ -2,9 +2,11 @@ package com.hasibur.CareerFootsteps.controller;
 
 
 import com.hasibur.CareerFootsteps.auth.UserInfo;
+import com.hasibur.CareerFootsteps.model.Comment;
 import com.hasibur.CareerFootsteps.model.Post;
 import com.hasibur.CareerFootsteps.model.User;
 import com.hasibur.CareerFootsteps.service.category.CategoryService;
+import com.hasibur.CareerFootsteps.service.comment.CommentService;
 import com.hasibur.CareerFootsteps.service.post.PostService;
 import com.hasibur.CareerFootsteps.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -41,7 +44,6 @@ public class UserController {
 
     @Autowired
     private CategoryService categoryService;
-
 
 
     //===========================================
@@ -80,8 +82,8 @@ public class UserController {
     public String processSignup(@Valid User user, BindingResult result) {
 
         User check_user = userService.getUserByUsername(user.getUsername());
-        if(check_user != null){
-            ObjectError error = new ObjectError("username","");
+        if (check_user != null) {
+            ObjectError error = new ObjectError("username", "");
             result.rejectValue("username", "error.user", "An account already exists for this username.");
             return "user/signup.html";
         }
@@ -99,19 +101,6 @@ public class UserController {
         return "/user/signup_success.html";
     }
 
-    @GetMapping("/access_denied")
-    public String accessDeniedPage() {
-
-        return "user/access_denied.html";
-    }
-
-    @GetMapping("/logout_warning")
-    public String logoutWarning() {
-
-        return "user/logout_warning.html";
-    }
-
-
     @PostMapping("/user/logout")
     public String customLogout(HttpServletRequest request, HttpServletResponse response) {
 
@@ -126,34 +115,30 @@ public class UserController {
 
 
     //===========================================
-    //=========     Normal Routing     =====>>>>>
+    //=========  Normal Routing - GET  =====>>>>>
     //===========================================
 
-
     @GetMapping("/user/home")
-    public String homePage(Model model){
+    public String homePage(Model model) {
 
         model.addAttribute("post_form", new Post());
         model.addAttribute("categories", categoryService.getAllCategory());
-        model.addAttribute("posts",postService.getAllPost());
+        model.addAttribute("posts", postService.getAllPost());
 
 
         return "home.html";
     }
 
-    @GetMapping("/user/allpost")
-    public String allPost(Model model){
+    @GetMapping("/access_denied")
+    public String accessDeniedPage() {
 
-
-        return "allpost.html";
+        return "user/access_denied.html";
     }
 
-    @GetMapping("/user/single_post/{pid}")
-    public String singlePost(@PathVariable("pid") Long id, Model model){
+    @GetMapping("/logout_warning")
+    public String logoutWarning() {
 
-        model.addAttribute("post",postService.getPostById(id));
-
-        return "single_post.html";
+        return "user/logout_warning.html";
     }
 
     @GetMapping("/user/profile")
@@ -165,36 +150,11 @@ public class UserController {
         User user = userInfo.userInfo();
         model.addAttribute("user", user);
 
-        model.addAttribute("posts", postService.getPostByUser(user));
+        model.addAttribute("posts", postService.getPostByUser(user)); //user.postList can be alternative
 
 
         return "user/profile.html";
     }
 
-
-    //===========================================
-    //========= CRUD Site              =====>>>>>
-    //===========================================
-
-
-    @PostMapping("/user/posted") //for home and user profile (need to handle ***)
-    public String userPosted(@Valid  Post post, BindingResult bindingResult){
-
-        if (bindingResult.hasErrors()) {
-            return "home.html";
-        }
-
-        LocalDateTime localDateTime = LocalDateTime.now();
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String formatDateTime = localDateTime.format(format);
-        post.setTime(formatDateTime);
-
-        User main_user = userInfo.userInfo();
-        post.setUser(main_user);
-
-        postService.addPost(post);
-
-        return "redirect:/user/home";
-    }
 
 }

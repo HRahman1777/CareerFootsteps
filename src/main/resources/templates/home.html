@@ -76,7 +76,7 @@
             <p class="text-muted" th:text="|@${post.user.username} - ${post.time} - ${post.category.name}|"><small/>
             <p th:text="${post.description}"></p>
             <p class="mt-1" th:text="${post.picture}">IMAGE</p>
-            <a th:href="|@{/user/single_post}/${post.id}|" class="btn btn-outline-dark">View/Comment</a>
+            <a th:href="|@{/user/single_post}/${post.id}|" class="btn btn-outline-dark" style="width: 10rem;">View/Comment</a>
         </div>
     </th:block>
 

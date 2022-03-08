@@ -27,16 +27,23 @@ public class Post {
     private String picture;
     private String time;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "category_id")
     private Category category;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REFRESH)
     @JoinColumn(name = "user_id")
     private User user;
 
-    @ManyToMany
-    @JoinColumn(name = "tag_id")
-    private List<Tag> tagList;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
+    private List<Comment> commentList;
+
+    @ManyToMany(cascade =  CascadeType.ALL)
+    @JoinTable(
+            name = "Post_and_Tag",
+            joinColumns = @JoinColumn(name = "post_id"),
+            inverseJoinColumns =  @JoinColumn(name = "tag_id")
+    )
+    private List<Tag> tagList;
 }
