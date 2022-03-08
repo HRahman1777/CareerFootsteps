@@ -1,6 +1,7 @@
 package com.hasibur.CareerFootsteps.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Entity
@@ -10,7 +11,9 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    //private Long userId;
+
+
+    @NotEmpty(message = "Field is Empty!")
     private String comment;
 
 

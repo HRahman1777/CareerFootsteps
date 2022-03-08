@@ -14,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -74,7 +77,18 @@ public class UserController {
     }
 
     @PostMapping("/process_signup")
-    public String processSignup(User user) {
+    public String processSignup(@Valid User user, BindingResult result) {
+
+        User check_user = userService.getUserByUsername(user.getUsername());
+        if(check_user != null){
+            ObjectError error = new ObjectError("username","");
+            result.rejectValue("username", "error.user", "An account already exists for this username.");
+            return "user/signup.html";
+        }
+
+        if (result.hasErrors()) {
+            return "user/signup.html";
+        }
 
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
@@ -163,8 +177,12 @@ public class UserController {
     //===========================================
 
 
-    @PostMapping("/user/posted")
-    public String userPosted(Post post){
+    @PostMapping("/user/posted") //for home and user profile (need to handle ***)
+    public String userPosted(@Valid  Post post, BindingResult bindingResult){
+
+        if (bindingResult.hasErrors()) {
+            return "home.html";
+        }
 
         LocalDateTime localDateTime = LocalDateTime.now();
         DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
@@ -178,6 +196,5 @@ public class UserController {
 
         return "redirect:/user/home";
     }
-
 
 }
