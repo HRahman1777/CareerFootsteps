@@ -16,18 +16,19 @@
         <div class="row">
             <div class="col-4">
                 <p>Select Category</p>
-                <form>
-                    <select class="form-select" name="" onchange="this.form.submit()">
-                        <option value="">Science</option>
-                        <option value="">Economic</option>
-                        <option value="">Biology</option>
+                <form th:action="@{/user/allpost/}">
+                    <select class="form-select" name="catId" onchange="this.form.submit()">
+                        <option disabled th:selected="!${catSelect}">Please select...</option>
+                        <th:block th:each="category: ${categories}">
+                            <option th:value="${category.id}" th:text="${category.name}" th:selected="${category.id} == ${catSelect}"></option>
+                        </th:block>
                     </select>
                 </form>
             </div>
             <div class="col">
                 <p>Search Keyword</p>
-                <form class="d-flex">
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+                <form class="d-flex" th:action="@{/user/allpost/search/}">
+                    <input class="form-control me-2" type="search" placeholder="search in title" th:value="${sKeyChk} ? ${sKeyChk} : ''" aria-label="Search" name="sKey">
                     <button class="btn btn-outline-success btn-sm" type="submit">Search</button>
                 </form>
             </div>
@@ -35,47 +36,29 @@
 
     </div>
 
-    <div class="card card-body shadow p-3 mb-3 bg-body rounded">
-        <h2>Post Title ,,,,,,,,,,,,.</h2>
-        <p>Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-        </p>
-
-        <p class="mt-1">IMAGE</p>
-
-        <img th:src="@{img/img1.JPG}" class="img-fluid" alt="Test Image">
-
-    </div>
-
-    <div class="card card-body shadow p-3 mb-3 bg-body rounded">
-        <h2>Post Title ,,,,,,,,,,,,.</h2>
-        <p>Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-        </p>
-
-        <p class="mt-1">IMAGE</p>
-
-        <img th:src="@{img/img1.JPG}" class="img-fluid" alt="Test Image">
-
-    </div>
-
-    <div class="card card-body shadow p-3 mb-3 bg-body rounded">
-        <h2>Post Title ,,,,,,,,,,,,.</h2>
-        <p>Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-            Post Description LoremPost Description LoremPost Description Lorem
-        </p>
-
-        <p class="mt-1">IMAGE</p>
-
-        <img th:src="@{img/img1.JPG}" class="img-fluid" alt="Test Image">
-
-    </div>
+    <th:block th:each="post: ${posts}">
+        <div class="card card-body shadow p-3 mb-3 bg-body rounded">
+            <h2 th:text="${post.title}"></h2>
+            <a href="#" class="smart-link">
+                <h6 th:text="|@${post.user.username}|"></h6>
+            </a>
+            <div class="input-group">
+                <span>Category: </span>
+                <a th:href="@{'/user/allpost/category/' + ${post.category.id}}" class="smart-link">
+                    <p th:text="|_  ${post.category.name}|"></p>
+                </a>
+            </div>
+            <p th:text="${post.description}"></p>
+            <p class="mt-1" th:text="${post.picture}">IMAGE</p>
+            <div class="row">
+                <div class="col-10"></div>
+                <div class="col">
+                    <i><p th:text="|Time: ${post.time}|" class="text-muted"></p></i>
+                </div>
+            </div>
+            <a th:href="|@{/user/single_post}/${post.id}|" class="btn btn-outline-dark" style="width: 10rem;">View/Comment</a>
+        </div>
+    </th:block>
 
 </div>
 

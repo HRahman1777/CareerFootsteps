@@ -23,6 +23,8 @@ public class Post {
 
     @NotEmpty(message = "Please Enter Title!")
     private String title;
+
+    @Lob
     private String description;
     private String picture;
     private String time;

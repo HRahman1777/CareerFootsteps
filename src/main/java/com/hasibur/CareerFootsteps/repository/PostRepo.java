@@ -14,4 +14,7 @@ public interface PostRepo extends JpaRepository<Post, Long> {
 
     @Query("FROM Post WHERE user = ?1")
     public List<Post> getPostByUser(User user);
+
+    @Query("FROM Post WHERE title LIKE %?1%")
+    public List<Post> findBySearchKeyword(String sKey);
 }

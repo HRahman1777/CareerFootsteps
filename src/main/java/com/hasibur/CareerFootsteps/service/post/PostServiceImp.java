@@ -40,4 +40,9 @@ public class PostServiceImp implements PostService{
         postRepo.deleteById(id);
     }
 
+    @Override
+    public List<Post> getPostBySearch(String sKey) {
+        return postRepo.findBySearchKeyword(sKey);
+    }
+
 }

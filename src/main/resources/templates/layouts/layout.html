@@ -13,6 +13,8 @@
     <link rel="stylesheet" href="" th:href="@{css/styles.css}">
     <link rel="stylesheet" href="" th:href="@{../css/styles.css}">
     <link rel="stylesheet" href="" th:href="@{../../css/styles.css}">
+    <link rel="stylesheet" href="" th:href="@{../../../css/styles.css}">
+    <link rel="stylesheet" href="" th:href="@{../../../../css/styles.css}">
 
     <title>Career Footsteps</title>
 </head>
@@ -49,7 +51,7 @@
 
                     <li class="nav-item" sec:authorize="isAuthenticated()">
                         <form th:action="@{/user/logout}" method="post" class="nav-link">
-                            <input type="submit" value="Sign Out"/>
+                            <input type="submit" class="signout" value="Sign Out"/>
                         </form>
                     </li>
 
@@ -95,7 +97,7 @@
 
                     <li class="nav-item" sec:authorize="isAuthenticated()">
                         <form th:action="@{/user/logout}" method="post">
-                            <input type="submit" value="Sign Out"/>
+                            <input type="submit" class="signout" value="Sign Out"/>
                         </form>
                     </li>
                 </ul>

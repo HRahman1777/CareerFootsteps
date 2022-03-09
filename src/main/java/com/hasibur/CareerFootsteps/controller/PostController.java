@@ -1,6 +1,7 @@
 package com.hasibur.CareerFootsteps.controller;
 
 import com.hasibur.CareerFootsteps.auth.UserInfo;
+import com.hasibur.CareerFootsteps.model.Category;
 import com.hasibur.CareerFootsteps.model.Comment;
 import com.hasibur.CareerFootsteps.model.Post;
 import com.hasibur.CareerFootsteps.model.User;
@@ -15,10 +16,12 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.validation.Valid;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -36,7 +39,6 @@ public class PostController {
     @Autowired
     private CategoryService categoryService;
 
-
     //===========================================
     //=========  Normal Routing - GET  =====>>>>>
     //===========================================
@@ -44,6 +46,8 @@ public class PostController {
     @GetMapping("/user/allpost")
     public String allPost(Model model) {
 
+        model.addAttribute("categories", categoryService.getAllCategory());
+        model.addAttribute("posts", postService.getAllPost());
 
         return "all_post.html";
     }
@@ -60,16 +64,16 @@ public class PostController {
     }
 
     @GetMapping("/user/single_post/{pid}/delete")
-    public String deletePost(@PathVariable("pid") Long pstId){
+    public String deletePost(@PathVariable("pid") Long pstId) {
 
         Long chekId = postService.getPostById(pstId).getUser().getId();
 
 
-        if(Objects.equals(chekId, userInfo.userInfo().getId())){
-            try{
+        if (Objects.equals(chekId, userInfo.userInfo().getId())) {
+            try {
 
                 postService.deleteByPostId(pstId);
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 System.out.println("Post Delete Exception: " + ex);
             }
         }
@@ -78,13 +82,13 @@ public class PostController {
     }
 
     @GetMapping("/user/single_post/{pid}/comment/{cid}/delete")
-    public String deleteComment(@PathVariable("cid") Long cmntId, @PathVariable("pid") Long pstId){
+    public String deleteComment(@PathVariable("cid") Long cmntId, @PathVariable("pid") Long pstId) {
         Long chekId = commentService.getCommentById(cmntId).getUser().getId();
 
-        if(Objects.equals(chekId, userInfo.userInfo().getId())){
-            try{
+        if (Objects.equals(chekId, userInfo.userInfo().getId())) {
+            try {
                 commentService.deleteByCommentId(cmntId);
-            }catch (Exception ex){
+            } catch (Exception ex) {
                 System.out.println("Comment Delete Exception: " + ex);
             }
         }
@@ -92,10 +96,69 @@ public class PostController {
         return "redirect:/user/single_post/" + pstId;
     }
 
+    @GetMapping("/user/allpost/")
+    public String allCategoryPost(@RequestParam Long catId, Model model) {
+
+        if (catId != null) {
+            try {
+                List<Post> newPostListCat = categoryService.getCategoryById(catId).getPostList();
+                model.addAttribute("posts", newPostListCat);
+                model.addAttribute("catSelect", catId);
+            }catch(Exception ex){
+                System.out.println("Exception Finding PostList by CategoryId: " + ex);
+                return "redirect: /user/allpost";
+            }
+        } else {
+            return "redirect: /user/allpost";
+        }
+
+        model.addAttribute("categories", categoryService.getAllCategory());
+        return "all_post.html";
+    }
+
+    @GetMapping("/user/allpost/category/{cid}")
+    public String postByCategory(@PathVariable("cid") Long catId, Model model) {
+
+        if (catId != null) {
+            try {
+                List<Post> newPostListCat = categoryService.getCategoryById(catId).getPostList();
+                model.addAttribute("posts", newPostListCat);
+                model.addAttribute("catSelect", catId);
+            }catch(Exception ex){
+                System.out.println("Exception Finding PostList by CategoryId: " + ex);
+                return "redirect: /user/allpost";
+            }
+        } else {
+            return "redirect: /user/allpost";
+        }
+
+        model.addAttribute("categories", categoryService.getAllCategory());
+        return "all_post.html";
+    }
+
+    @GetMapping("/user/allpost/search/")
+    public String allCategoryPost(@RequestParam String sKey, Model model) {
+        if (sKey != null ){
+            try {
+                List<Post> newPostListSer = postService.getPostBySearch(sKey);
+                model.addAttribute("posts", newPostListSer);
+                model.addAttribute("sKeyChk", sKey);
+            }catch(Exception ex){
+                System.out.println("Exception Finding PostList by SearchKW: " + ex);
+                return "redirect: /user/allpost";
+            }
+        } else {
+            return "redirect: /user/allpost";
+        }
+
+        model.addAttribute("categories", categoryService.getAllCategory());
+
+        return "all_post.html";
+    }
 
 
     //===========================================
-    //=========   CRUD Site  -  POST   =====>>>>>
+    //=========    MAIN POST Mapping   =====>>>>>
     //===========================================
 
     @PostMapping("/user/posted") //for home and user profile (need to handle ***)
@@ -137,10 +200,7 @@ public class PostController {
 
         commentService.addComment(comment);
         return "redirect:/user/single_post/" + pid;
-
     }
-
-
 
 
 }

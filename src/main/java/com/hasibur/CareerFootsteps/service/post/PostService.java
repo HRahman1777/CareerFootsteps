@@ -12,5 +12,6 @@ public interface PostService {
     public Post getPostById(Long id);
     public List<Post> getPostByUser(User user);
     public void deleteByPostId(Long id);
+    public List<Post> getPostBySearch(String sKey);
     //public List<Comment> getAllCommentOfPost();
 }

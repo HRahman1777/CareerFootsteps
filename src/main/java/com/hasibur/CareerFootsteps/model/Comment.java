@@ -21,6 +21,7 @@ public class Comment {
     private Long id;
 
     @NotEmpty(message = "Comment Field Empty!")
+    @Column(columnDefinition = "TEXT")
     private String commentName;
 
     private String time;
