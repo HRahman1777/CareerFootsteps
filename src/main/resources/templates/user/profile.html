@@ -64,8 +64,8 @@
 
                 <div class="mb-3">
                     <label for="fileImage" class="form-label">Picture</label>
-                    <input type="text" class="form-control" id="fileImage" placeholder="enter title"
-                           th:field="*{picture}">
+                    <input type="file" class="form-control" id="fileImage" name="image"
+                           accept="image/png, image/jpeg, image/jpg"/>
                 </div>
 
 
@@ -89,7 +89,12 @@
                 </a>
             </div>
             <p th:text="${post.description}"></p>
-            <p class="mt-1" th:text="${post.picture}">IMAGE</p>
+
+            <div th:if="${post.picture} != null">
+                <img th:src="@{'../PostPicture/'+${post.id}+'/'+${post.picture}}" class="img-fluid"
+                     th:alt="${post.title}" style="width: 40%;">
+            </div>
+
             <div class="row">
                 <div class="col-10"></div>
                 <div class="col">

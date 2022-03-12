@@ -1,5 +1,6 @@
 package com.hasibur.CareerFootsteps.controller;
 
+import com.hasibur.CareerFootsteps.auth.ImageUploadUtil;
 import com.hasibur.CareerFootsteps.auth.UserInfo;
 import com.hasibur.CareerFootsteps.model.Category;
 import com.hasibur.CareerFootsteps.model.Comment;
@@ -12,13 +13,16 @@ import com.hasibur.CareerFootsteps.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -63,6 +67,22 @@ public class PostController {
         return "single_post.html";
     }
 
+    @GetMapping("/user/single_post/edit/{pid}")
+    public String singlePostEdit(@PathVariable("pid") Long id, Model model) {
+
+        Post singlePost = postService.getPostById(id);
+        User main_user = userInfo.userInfo();
+
+        model.addAttribute("singlePost", singlePost);
+        model.addAttribute("categories", categoryService.getAllCategory());
+
+        if (singlePost.getUser().getId() != main_user.getId()) {
+            return "user/access_denied.html";
+        }
+        
+        return "single_post_edit.html";
+    }
+
     @GetMapping("/user/single_post/{pid}/delete")
     public String deletePost(@PathVariable("pid") Long pstId) {
 
@@ -104,7 +124,7 @@ public class PostController {
                 List<Post> newPostListCat = categoryService.getCategoryById(catId).getPostList();
                 model.addAttribute("posts", newPostListCat);
                 model.addAttribute("catSelect", catId);
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 System.out.println("Exception Finding PostList by CategoryId: " + ex);
                 return "redirect: /user/allpost";
             }
@@ -124,7 +144,7 @@ public class PostController {
                 List<Post> newPostListCat = categoryService.getCategoryById(catId).getPostList();
                 model.addAttribute("posts", newPostListCat);
                 model.addAttribute("catSelect", catId);
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 System.out.println("Exception Finding PostList by CategoryId: " + ex);
                 return "redirect: /user/allpost";
             }
@@ -133,17 +153,18 @@ public class PostController {
         }
 
         model.addAttribute("categories", categoryService.getAllCategory());
+
         return "all_post.html";
     }
 
     @GetMapping("/user/allpost/search/")
     public String allCategoryPost(@RequestParam String sKey, Model model) {
-        if (sKey != null ){
+        if (sKey != null) {
             try {
                 List<Post> newPostListSer = postService.getPostBySearch(sKey);
                 model.addAttribute("posts", newPostListSer);
                 model.addAttribute("sKeyChk", sKey);
-            }catch(Exception ex){
+            } catch (Exception ex) {
                 System.out.println("Exception Finding PostList by SearchKW: " + ex);
                 return "redirect: /user/allpost";
             }
@@ -162,24 +183,23 @@ public class PostController {
     //===========================================
 
     @PostMapping("/user/posted") //for home and user profile (need to handle ***)
-    public String userPosted(@Valid Post post, BindingResult bindingResult) {
+    public String userPosted(@Valid Post post, BindingResult bindingResult, @RequestParam("image") MultipartFile multipartFile) throws IOException {
 
         if (bindingResult.hasErrors()) {
             return "home.html";
         }
 
-        LocalDateTime localDateTime = LocalDateTime.now();
-        DateTimeFormatter format = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
-        String formatDateTime = localDateTime.format(format);
-        post.setTime(formatDateTime);
+        String pictureName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+        post.setPicture(pictureName);
 
-        User main_user = userInfo.userInfo();
-        post.setUser(main_user);
+        Post savedPost = postService.addPost(post);
 
-        postService.addPost(post);
+        String uploadDir = "src/main/resources/static/PostPicture/" + savedPost.getId();
+        ImageUploadUtil.saveFile(uploadDir, pictureName, multipartFile);
 
         return "redirect:/user/home";
     }
+
 
     @PostMapping("/user/post/comment/{pid}")
     public String addComment(@PathVariable("pid") Long pid, @Valid Comment comment, BindingResult bindingResult) {
@@ -200,6 +220,28 @@ public class PostController {
 
         commentService.addComment(comment);
         return "redirect:/user/single_post/" + pid;
+    }
+
+
+    @PostMapping("/user/single_post/edited")
+    public String postUpdate(@Valid Post post, BindingResult bindingResult, @RequestParam("image") MultipartFile multipartFile)
+            throws IOException {
+
+        if (bindingResult.hasErrors()) {
+            return "redirect:../";
+        }
+
+        if (!multipartFile.isEmpty()) {
+            String pictureName = StringUtils.cleanPath(multipartFile.getOriginalFilename());
+            post.setPicture(pictureName);
+            String uploadDir = "src/main/resources/static/PostPicture/" + post.getId();
+            ImageUploadUtil.saveFile(uploadDir, pictureName, multipartFile);
+        }
+
+        postService.addPost(post);
+
+
+        return "redirect:/user/home";
     }
 
 

@@ -49,7 +49,21 @@
                 </a>
             </div>
             <p th:text="${post.description}"></p>
-            <p class="mt-1" th:text="${post.picture}">IMAGE</p>
+
+            <div th:if="${post.picture} != null">
+
+                <div th:if="${sKeyChk} OR ${catSelect}">
+                    <img th:src="@{'../../../PostPicture/'+${post.id}+'/'+${post.picture}}" class="img-fluid"
+                         th:alt="${post.title}" style="width: 40%;">
+                </div>
+
+                <div th:if="!${catSelect} AND !${sKeyChk}">
+                    <img th:src="@{'../PostPicture/'+${post.id}+'/'+${post.picture}}" class="img-fluid"
+                         th:alt="${post.title}" style="width: 40%;">
+                </div>
+
+            </div>
+
             <div class="row">
                 <div class="col-10"></div>
                 <div class="col">

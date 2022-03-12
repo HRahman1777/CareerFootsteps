@@ -19,15 +19,17 @@
 
         <div class="input-group">
             <span>Category: </span>
-            <a href="#" class="smart-link">
-                <h6 th:text="|_  ${singlePost.category.name}|"></h6>
+            <a th:href="@{'/user/allpost/category/' + ${singlePost.category.id}}" class="smart-link">
+                <p th:text="|_  ${singlePost.category.name}|"></p>
             </a>
         </div>
 
-        <p class="mt-1" th:text="${singlePost.picture}">IMAGE</p>
+        <div class="mt-2"></div>
 
-        <img th:src="@{../../img/img1.JPG}" class="img-fluid mx-auto d-block rounded"
-             style="max-width: 50%; height: auto;" alt="Test Image">
+        <div th:if="${singlePost.picture} != null">
+            <img th:src="@{'../../PostPicture/'+${singlePost.id}+'/'+${singlePost.picture}}" class="img-fluid"
+                 th:alt="${singlePost.title}" style="width: 40%;">
+        </div>
 
         <div class="row">
             <div class="col-10"></div>
@@ -47,6 +49,10 @@
             <div class="col-5"></div>
             <div class="col">
                 <p class="mt-2">
+                    <a class="btn btn-sm btn-outline-warning"
+                       th:href="@{'/user/single_post/edit/' + ${singlePost.id}}"
+                    >Edit</a>
+
                     <button class="btn btn-sm btn-warning" type="button" data-bs-toggle="collapse"
                             data-bs-target="#collapsePost"
                             aria-expanded="false" aria-controls="collapsePost">

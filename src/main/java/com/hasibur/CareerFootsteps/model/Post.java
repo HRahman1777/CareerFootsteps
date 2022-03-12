@@ -14,7 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
-@Table(name="post_table")
+@Table(name = "post_table")
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,6 +26,8 @@ public class Post {
 
     @Lob
     private String description;
+
+    @Column(nullable = true)
     private String picture;
     private String time;
 
@@ -41,11 +43,11 @@ public class Post {
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> commentList;
 
-    @ManyToMany(cascade =  CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "Post_and_Tag",
             joinColumns = @JoinColumn(name = "post_id"),
-            inverseJoinColumns =  @JoinColumn(name = "tag_id")
+            inverseJoinColumns = @JoinColumn(name = "tag_id")
     )
     private List<Tag> tagList;
 }
