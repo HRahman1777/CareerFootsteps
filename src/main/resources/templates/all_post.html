@@ -39,7 +39,7 @@
     <th:block th:each="post: ${posts}">
         <div class="card card-body shadow p-3 mb-3 bg-body rounded">
             <h2 th:text="${post.title}"></h2>
-            <a href="#" class="smart-link">
+            <a th:href="@{'/user/profile/' + ${post.user.username}}" class="smart-link">
                 <h6 th:text="|@${post.user.username}|"></h6>
             </a>
             <div class="input-group">

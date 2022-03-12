@@ -101,6 +101,25 @@ public class UserController {
         return "/user/signup_success.html";
     }
 
+    @PostMapping("/user/profile/edited")
+    public String userprofileEdited(User user) {
+
+        User check_user = userInfo.userInfo();
+
+        user.setId(check_user.getId());
+        user.setUsername(check_user.getUsername());
+        user.setPassword(check_user.getPassword());
+
+        System.out.println(user.getId());
+        System.out.println(user.getFirstName());
+        System.out.println(user.getUsername());
+        System.out.println(user.getPassword());
+
+        userService.addUser(user);
+
+        return "redirect:/user/profile";
+    }
+
     @PostMapping("/user/logout")
     public String customLogout(HttpServletRequest request, HttpServletResponse response) {
 
@@ -154,6 +173,34 @@ public class UserController {
 
 
         return "user/profile.html";
+    }
+
+    @GetMapping("/user/profile/edit")
+    public String userProfileEdit(Model model) {
+
+        User user = userInfo.userInfo();
+        model.addAttribute("user", user);
+
+        return "user/edit_profile.html";
+    }
+
+    @GetMapping("/user/profile/{uname}")
+    public String userProfileAny(@PathVariable("uname") String userName, Model model) {
+
+        User mainUser = userInfo.userInfo();
+        User reqUser = userService.getUserByUsername(userName);
+        
+        if (reqUser == null) {
+            return "redirect:/user/profile";
+        }
+
+        if (mainUser.getId() == reqUser.getId()) {
+            return "redirect:/user/profile";
+        } else {
+            model.addAttribute("user", reqUser);
+        }
+
+        return "user/any_profile.html";
     }
 
 
