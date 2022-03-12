@@ -8,11 +8,29 @@
 <div th:insert="layouts/layout.html :: admin_navbar">
 </div>
 
+
 <div class="container">
-
-    <h1>This is Admin</h1>
-
+    <div class="bg-dark text-secondary px-4 py-5 text-center shadow">
+        <div class="py-5">
+            <h1 class="text-warning">ADMIN</h1>
+            <h2 class="text-warning">Welcome To Control Panel!</h2>
+            <br>
+            <h3 class="display-5 fw-bold text-white" th:text="|${user.firstName} ${user.lastName}|"></h3>
+            <div class="col-lg-6 mx-auto">
+                <p class="fs-5 mb-4">
+                <h4 th:text="|Username: @${user.username}|"></h4>
+                <h4 th:text="| Email: ${user.email}|"></h4>
+                </p>
+                <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                    <a type="button" th:href="@{admin/alluser/}" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold">All User</a>
+                    <a type="button" th:href="@{admin/allpost/}" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold">All Post</a>
+                    <a type="button" th:href="@{admin/allcategory/}" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold">All Category</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
 
 </div>
 
