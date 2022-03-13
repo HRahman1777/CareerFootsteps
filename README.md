@@ -5,6 +5,8 @@ One kind of blog site where expert users can share there experiences and steps f
 Target Keywords: `jpa` `thymeleaf` `mysql` `rest-api` `js-framework`
 <hr>
 
+## Click Here For [Screenshots](https://github.com/HRahman1777/CareerFootsteps/blob/6c1d6d7e90000c88cb871b89895e839fb0be38dc/index.md)
+
 ## Model
 
   * `User` (id, firstname, lastname, email, username, password, role)
