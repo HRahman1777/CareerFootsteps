@@ -31,4 +31,9 @@ public class UserServiceImp implements UserService {
     public User getUserById(Long id) {
         return userRepo.findById(id).get();
     }
+
+    @Override
+    public void removeUserById(Long id) {
+        userRepo.deleteById(id);
+    }
 }

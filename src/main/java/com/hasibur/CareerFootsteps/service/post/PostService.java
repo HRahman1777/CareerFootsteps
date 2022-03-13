@@ -8,10 +8,17 @@ import java.util.List;
 
 public interface PostService {
     public Post addPost(Post post);
+
     public List<Post> getAllPost();
+
     public Post getPostById(Long id);
+
     public List<Post> getPostByUser(User user);
+
     public void deleteByPostId(Long id);
+
     public List<Post> getPostBySearch(String sKey);
+
+    public void removePostById(Long id);
     //public List<Comment> getAllCommentOfPost();
 }

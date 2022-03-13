@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class CategoryServiceImp implements CategoryService{
+public class CategoryServiceImp implements CategoryService {
 
     @Autowired
     CategoryRepo categoryRepo;
@@ -28,5 +28,15 @@ public class CategoryServiceImp implements CategoryService{
     @Override
     public Category getCategoryById(Long id) {
         return categoryRepo.findById(id).get();
+    }
+
+    @Override
+    public Category getCategoryByName(String name) {
+        return categoryRepo.findByName(name);
+    }
+
+    @Override
+    public void removeCategoryById(Long id) {
+        categoryRepo.deleteById(id);
     }
 }

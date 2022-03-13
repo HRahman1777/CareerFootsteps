@@ -61,4 +61,9 @@ public class PostServiceImp implements PostService {
         return postRepo.findBySearchKeyword(sKey);
     }
 
+    @Override
+    public void removePostById(Long id) {
+        postRepo.deleteById(id);
+    }
+
 }
